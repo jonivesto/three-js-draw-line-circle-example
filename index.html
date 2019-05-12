@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		
+		<title>three.js lines</title>
+		
+		<!--Three-->
+		<script src="js/three.min.js"></script>
+		
+		<!--Imports-->
+		<script src="js/LineSegmentsGeometry.js"></script>
+		<script src="js/LineSegments2.js"></script>
+		<script src="js/LineMaterial.js"></script>
+		<script src="js/LineGeometry.js"></script>
+		<script src="js/Line2.js"></script>
+		
+		<style>body{ margin: 0; overflow:hidden; }</style>
+		
+	</head>	
+	<body>
+		<script>
+			var camera, scene, renderer, geometry, material, mesh;
+
+			init();
+			
+			// Draw line from start point to end point
+			drawLine(new THREE.Vector3(0.6,0.5,0),new THREE.Vector3(0.6,-0.5,0));
+			
+			// Draw circle with radius
+			drawCircle(0.5);
+			
+			renderer.render( scene, camera );
+			
+			function init() {
+			
+				camera = new THREE.PerspectiveCamera( 70, window.innerWidth / window.innerHeight, 0.01, 10 );
+				camera.position.z = 1;
+				
+				scene = new THREE.Scene();
+
+				renderer = new THREE.WebGLRenderer( { antialias: true } );
+				renderer.setSize( window.innerWidth, window.innerHeight );
+				document.body.appendChild( renderer.domElement );
+
+			}
+
+			function drawCircle(radius){
+			
+				var positions = [], colors = [], points = [];
+
+				for(let i = 0; i <= 360; i++){
+				   points.push(new THREE.Vector3(Math.sin(i*(Math.PI/180))*radius, Math.cos(i*(Math.PI/180))*radius, 0));
+				}
+
+				var color = new THREE.Color();
+				for (let i = 0; i < points.length; i++) {
+					let point = points[i];
+					positions.push( point.x, point.y, point.z );
+					color.setHSL( 1, 1, 1 );
+					colors.push( color.r, color.g, color.b );
+				}
+
+				var geometry = new THREE.LineGeometry();
+				geometry.setPositions( positions );
+				geometry.setColors( colors );
+
+				var matLine = new THREE.LineMaterial({
+					color: "red",
+					linewidth: 0.001,
+					vertexColors: THREE.VertexColors,
+					dashed: false
+				});
+
+				let line = new THREE.Line2( geometry, matLine );
+				line.computeLineDistances();
+
+				scene.add( line );
+			}
+
+			function drawLine(start, end){
+			
+				var positions = [], colors = [], points = [];
+
+				points.push(start, end);
+
+				var color = new THREE.Color();
+				for (let i = 0; i < points.length; i++) {
+					let point = points[i];
+					positions.push( point.x, point.y, point.z );
+					color.setHSL( 1, 1, 1 );
+					colors.push( color.r, color.g, color.b );
+				}
+
+				var geometry = new THREE.LineGeometry();
+				geometry.setPositions( positions );
+				geometry.setColors( colors );
+
+				var matLine = new THREE.LineMaterial({
+					color: "white",
+					linewidth: 0.005,
+					vertexColors: THREE.VertexColors,
+					dashed: false
+				});
+
+				let line = new THREE.Line2( geometry, matLine );
+				line.computeLineDistances();
+
+				scene.add( line );
+			}
+		</script>
+	</body>
+</html>
