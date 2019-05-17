@@ -49,7 +49,9 @@
 			function drawCircle(radius){
 			
 				var positions = [], colors = [], points = [];
-
+				
+				// Generate points for the line
+				// This is the most important thing in this example!
 				for(let i = 0; i <= 360; i++){
 				   points.push(new THREE.Vector3(Math.sin(i*(Math.PI/180))*radius, Math.cos(i*(Math.PI/180))*radius, 0));
 				}
